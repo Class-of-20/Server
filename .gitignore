@@ -1,0 +1,5 @@
+# Jetbains
+.idea
+
+# Nodejs Modules
+node_modules
