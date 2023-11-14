@@ -11,15 +11,23 @@ const user = sequelize.define('userTest', {
     },
     id: {
         type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+            len: [5, 10],               // 길이가 5~10자여야 함
+        },
     },
     password: {
         type: Sequelize.STRING,
+        allowNull: false,
     },
     name : {
         type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: 'CoffeeName',     // 기본값으로 'CoffeeName'를 설정
     },
     address : {
         type: Sequelize.STRING,
+        allowNull: false,
     },
 }, {
     defaultScope: {
