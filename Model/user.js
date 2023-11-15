@@ -19,9 +19,6 @@ const user = sequelize.define('user', {
     password: {
         type: Sequelize.STRING,
         allowNull: false,
-        validate: {
-            len: [5, 20],
-        },
     },
     name : {    // 별명
         type: Sequelize.STRING,
@@ -47,6 +44,9 @@ const user = sequelize.define('user', {
     profileImage : {
         type: Sequelize.STRING,
     },
+    salt: {
+        type: Sequelize.STRING,
+    }
 }, {
     defaultScope: {
         attributes: {
