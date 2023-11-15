@@ -1,4 +1,11 @@
 const user = require('../Model/user');
+const {createHashedPassword} = require("./encryption");
+
+// 암호화 모듈
+const createSalt = async () => {
+    const buf = await randomBytesPromise(64);
+    return buf.toString("base64");
+};
 
 // 아이디 중복 체크 함수
 async function checkDuplicateId(id) {
@@ -63,6 +70,9 @@ async function createUser(req, res, id, password, name, address1, address2, addr
             } else {
                 console.log('사용 가능한 별명입니다.');
 
+                // 비밀번호 암호화
+                const {password, salt} = createHashedPassword(password);
+
                 // 회원가입
                 const result = await user.create({
                     id: id,
@@ -72,6 +82,7 @@ async function createUser(req, res, id, password, name, address1, address2, addr
                     address2: address2,
                     address3: address3,
                     profileImage: profileImage,
+                    salt: salt,
                 });
                 console.log('회원가입 성공!');
                 return res.status(200).json({ message: '회원가입 성공' });
