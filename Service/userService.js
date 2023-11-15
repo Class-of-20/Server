@@ -28,8 +28,10 @@ async function checkDuplicateName(name) {
 }
 
 // 회원가입 함수
-async function createUser(req, res, id, password, name, address1, address2, address3, profileImage) {
+async function createUser(req, res) {
     try {
+        const { id, password, name, address1, address2, address3, profileImage } = req.body;
+
         lengthId = id.length;
         lengthPassword = password.length;
         lengthName = name.length;
@@ -93,6 +95,5 @@ async function createUser(req, res, id, password, name, address1, address2, addr
 
 // 회원가입 요청 처리
 exports.postCreateUser = (req, res, next) => {
-    const { id, password, name, address1, address2, address3, profileImage } = req.body;
-    createUser(req, res, id, password, name, address1, address2, address3, profileImage);
+    createUser(req, res);
 };
