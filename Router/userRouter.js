@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const userController = require('../Controller/userController');
+const userController = require('../Service/userService');
 
 // '/user' is the default endpoint
 router.get('/', (req, res, next) => {
