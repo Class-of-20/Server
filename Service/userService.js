@@ -1,12 +1,6 @@
 const user = require('../Model/user');
 const {createHashedPassword} = require("./encryption");
 
-// 암호화 모듈
-const createSalt = async () => {
-    const buf = await randomBytesPromise(64);
-    return buf.toString("base64");
-};
-
 // 아이디 중복 체크 함수
 async function checkDuplicateId(id) {
     try {
@@ -71,12 +65,15 @@ async function createUser(req, res, id, password, name, address1, address2, addr
                 console.log('사용 가능한 별명입니다.');
 
                 // 비밀번호 암호화
-                const {password, salt} = createHashedPassword(password);
+                const {hashedPassword, salt} = await createHashedPassword(password);
+
+                console.log("2. hashedPassword:", hashedPassword);
+                console.log("2. salt:", salt);
 
                 // 회원가입
                 const result = await user.create({
                     id: id,
-                    password: password,
+                    password: hashedPassword,
                     name: name,
                     address1: address1,
                     address2: address2,
