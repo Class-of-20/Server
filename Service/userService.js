@@ -49,24 +49,6 @@ async function createUser(req, res) {
     try {
         const { id, password, name, address1, address2, address3, profileImage } = req.body;
 
-        lengthId = id.length;
-        lengthPassword = password.length;
-        lengthName = name.length;
-
-        // 길이 제한 체크
-        if(lengthId < 5 || lengthId > 20) {
-            console.log(`현재 아이디가 ${lengthId}자입니다. 아이디를 5~20자로 다시 설정하세요.`);
-            return res.status(400).json({ message: '아이디를 5~20자로 다시 설정하세요.' });
-        };
-        if(lengthPassword < 5 || lengthPassword > 20) {
-            console.log(`현재 비밀번호가 ${lengthPassword}자입니다. 비밀번호를 5~20자로 다시 설정하세요.`);
-            return res.status(400).json({ message: '비밀번호를 5~20자로 다시 설정하세요.' });
-        }
-        if(lengthName < 2 || lengthName > 10) {
-            console.log(`현재 별명이 ${lengthName}자입니다. 별명을 2~10자로 다시 설정하세요.`);
-            return res.status(400).json({ message: '별명을 2~10자로 다시 설정하세요.' });
-        }
-
         // 비밀번호 암호화
         const {hashedPassword, salt} = await createHashedPassword(password);
 
