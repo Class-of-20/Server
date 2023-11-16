@@ -2,25 +2,42 @@ const user = require('../Model/user');
 const {createHashedPassword} = require("./encryption");
 
 // 아이디 중복 체크 함수
-async function checkDuplicateId(id) {
+exports.checkDuplicateId = async (req, res, next) => {
+    const id = req.body.id;
+
     try {
         const foundUser = await user.findOne({
-            where: { id: id },
+            where: {id: id},
         });
-        return foundUser;
+        if (foundUser) {
+            console.log(`${id}는 이미 사용 중인 아이디입니다.`);
+            return res.status(200).json({message: '이미 사용 중인 아이디입니다.'});
+        } else {
+            console.log(`${id}는 사용 가능한 아이디입니다.`);
+            return res.status(200).json({message: '사용 가능한 아이디입니다.'});
+        }
     } catch (error) {
         console.error('find(id) 쿼리 실행 중 오류 발생:', error);
         throw error;
     }
-}
+};
 
 // 별명 중복 체크 함수
-async function checkDuplicateName(name) {
+exports.checkDuplicateName = async (req, res, next) => {
+    const name = req.body.name;
+
     try {
         const foundUser = await user.findOne({
             where: { name: name },
         });
-        return foundUser;
+        if (foundUser) {
+            console.log(`${name}는 이미 사용 중인 별명입니다.`);
+            return res.status(200).json({ message: '이미 사용 중인 별명입니다.' });
+        }
+        else{
+            console.log(`${name}는 사용 가능한 별명입니다.`);
+            return res.status(200).json({ message: '사용 가능한 별명입니다.' });
+        }
     } catch (error) {
         console.error('find(name) 쿼리 실행 중 오류 발생:', error);
         throw error;
@@ -50,43 +67,26 @@ async function createUser(req, res) {
             return res.status(400).json({ message: '별명을 2~10자로 다시 설정하세요.' });
         }
 
-        // 아이디 중복 체크
-        const existingUser = await checkDuplicateId(id);
-        if (existingUser) {
-            console.log(`${existingUser.id} 아이디가 중복됩니다.`);
-            return res.status(400).json({ message: '아이디가 중복됩니다.' });
-        } else {
-            console.log('사용 가능한 아이디입니다.');
+        // 비밀번호 암호화
+        const {hashedPassword, salt} = await createHashedPassword(password);
 
-            // 별명 중복 체크
-            const existingName = await checkDuplicateName(name);
-            if (existingName) {
-                console.log(`${existingName.name} 별명이 중복됩니다.`);
-                return res.status(400).json({ message: '별명이 중복됩니다.' });
-            } else {
-                console.log('사용 가능한 별명입니다.');
+        console.log("2. hashedPassword:", hashedPassword);
+        console.log("2. salt:", salt);
 
-                // 비밀번호 암호화
-                const {hashedPassword, salt} = await createHashedPassword(password);
+        // 회원가입
+        const result = await user.create({
+            id: id,
+            password: hashedPassword,
+            name: name,
+            address1: address1,
+            address2: address2,
+            address3: address3,
+            profileImage: profileImage,
+            salt: salt,
+        });
+        console.log('회원가입 성공!');
+        return res.status(200).json({ message: '회원가입 성공' });
 
-                console.log("2. hashedPassword:", hashedPassword);
-                console.log("2. salt:", salt);
-
-                // 회원가입
-                const result = await user.create({
-                    id: id,
-                    password: hashedPassword,
-                    name: name,
-                    address1: address1,
-                    address2: address2,
-                    address3: address3,
-                    profileImage: profileImage,
-                    salt: salt,
-                });
-                console.log('회원가입 성공!');
-                return res.status(200).json({ message: '회원가입 성공' });
-            }
-        }
     } catch (error) {
         console.error('회원가입 중 오류 발생:', error);
         return res.status(400).json({ message: '회원가입 중 오류 발생' });
