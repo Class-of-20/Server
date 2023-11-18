@@ -11,4 +11,7 @@ router.get('/', (req, res, next) => {
 // 회원가입
 router.post('/create', userController.postCreateUser);
 
+// 회원 탈퇴
+router.post('/destroy', userController.postDestroyUser);
+
 module.exports = router;

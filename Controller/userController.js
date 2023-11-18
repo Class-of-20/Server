@@ -21,3 +21,20 @@ exports.postCreateUser = (req, res, next) => {
             res.status(500).json({ message: 'Create User Fail!' });
         });
 };
+
+exports.postDestroyUser = (req, res, next) => {
+    const idx = req.body.idx;
+    
+    user.destroy({
+         where : { idx: idx }
+    })
+        .then(result => {
+            console.log('회원탈퇴 완료');
+            res.status(200).json({ message: 'Destroy User Success!' });
+        })
+        .catch(err => {
+            console.error('회원탈퇴 실패:', err);
+            res.status(500).json({ message: 'Destroy User Fail!' });
+        });
+
+};
