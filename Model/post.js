@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 
 const sequelize = require('../Database/mariadb.js');
 const user = require('./user');
+const {now} = require("sequelize/lib/utils");
 
 const post = sequelize.define('post', {
     idx: {
@@ -10,43 +11,37 @@ const post = sequelize.define('post', {
         allowNull: false,
         primaryKey: true
     },
-    write: {
-        type: user.id,
+    writer: {
+        type: Sequelize.INTEGER,
         allowNull: false,
+        // user 테이블의 idx를 참조
+        references: {
+            model: user,
+            key: 'idx',
+        }
     },
     address2: {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    address3 : {    // 별명
+    address3 : {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    addressPlace : {
+    placeName : {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    meeetDate : {
+    meetDate : {
         type: Sequelize.DATE,
         allowNull: false,
     },
-    meeetTime : {
-        type: Sequelize.TIME,
-        allowNull: false,
-    },
-    writeDate : {
-        type: Sequelize.DATE,
-        allowNull: false,
-    },
-    writeTime : {
-        type: Sequelize.TIME,
-        allowNull: false,
-    },
-    minPeople : {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-    },
-    maxPeople : {
+    // writeDate : {
+    //     type: Sequelize.STRING,
+    //     allowNull: false,
+    //     defaultValue: now().getDate(),
+    // },
+    people : {
         type: Sequelize.INTEGER,
         allowNull: false,
     },
@@ -69,6 +64,11 @@ const post = sequelize.define('post', {
     profileImage : {
         type: Sequelize.STRING,
     },
+});
+
+post.belongsTo(user, {
+    foreignKey: 'writer',
+    targetKey: 'idx'
 });
 
 sequelize.sync();
