@@ -4,7 +4,7 @@ const {now} = require("sequelize/lib/utils");
 
 exports.createPost = (req, res, next) => {
     try{
-        const { writer, address2, address3, placeName, meetDate,
+        const { writer, address2, address3, placeName, meetDate, meetTime,
             people, title, content, menu1, menu2, image } = req.body;
 
         post.create({
@@ -13,6 +13,7 @@ exports.createPost = (req, res, next) => {
             address3: address3,
             placeName: placeName,
             meetDate: meetDate,
+            meetTime: meetTime,
             people: people,
             title: title,
             content: content,

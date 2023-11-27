@@ -33,7 +33,11 @@ const post = sequelize.define('post', {
         allowNull: false,
     },
     meetDate : {
-        type: Sequelize.DATE,
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    meetTime : {
+        type: Sequelize.STRING,
         allowNull: false,
     },
     // writeDate : {
