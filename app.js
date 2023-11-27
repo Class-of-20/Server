@@ -12,6 +12,8 @@ app.use('/user', require('./Router/userRouter'));
 
 app.use('/post', require('./Router/postRouter'));
 
+app.use('/login', require('./Router/loginRouter'));
+
 app.listen(8080, () => {
     console.log("Server is running on port 8080.");
 });
