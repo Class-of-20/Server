@@ -10,6 +10,8 @@ router.get('/', (req, res, next) => {
 
 // 회원가입
 router.post('/create', userController.postCreateUser);
+router.post('/create/checkId', userController.checkDuplicateId);
+router.post('/create/checkName', userController.checkDuplicateName);
 
 // 회원 탈퇴
 router.post('/destroy', userController.postDestroyUser);

@@ -95,5 +95,4 @@ exports.postDestroyUser = (req, res, next) => {
             console.error('회원탈퇴 실패:', err);
             res.status(500).json({ message: 'Destroy User Fail!' });
         });
-
 };
