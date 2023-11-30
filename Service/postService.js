@@ -34,3 +34,17 @@ exports.createPost = (req, res, next) => {
         return res.status(400).json({message: '게시글 작성 중 오류 발생'});
     }
 }
+
+
+exports.deletePost =async(req, res) => {
+   
+    try {
+        await post.destroy({
+            where: { idx: req.params.idx },
+        });
+        console.error('deletePost() 성공');
+    } catch (error) {
+        console.log('deletePost() 오류:');
+        return res.status(400).json({ message: '게시물 삭제 중 오류 발생' });
+    }
+};
