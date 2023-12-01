@@ -43,8 +43,51 @@ exports.deletePost =async(req, res) => {
             where: { idx: req.params.idx },
         });
         console.error('deletePost() 성공');
+        return res.status(200).json({message: '게시글 삭제 완료'});
     } catch (error) {
         console.log('deletePost() 오류:');
         return res.status(400).json({ message: '게시물 삭제 중 오류 발생' });
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 };
