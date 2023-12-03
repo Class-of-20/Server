@@ -1,5 +1,5 @@
 const post = require('../Model/post');
-const {TIME, DATE} = require("sequelize");
+const {Op, TIME, DATE} = require("sequelize");
 const {now} = require("sequelize/lib/utils");
 
 exports.createPost = (req, res, next) => {
