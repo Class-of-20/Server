@@ -39,12 +39,12 @@ exports.createPost = (req, res, next) => {
 exports.readPostByIdx = async (req, res, next) => {
     const idx = req.params.idx;
     try {
-        const foundPost = await post.findOne({
+        const readPost = await post.findOne({
             where: {idx: idx},
         });
-        if (foundPost) {
+        if (readPost) {
             console.log("readPostByIdx() 성공");
-            return res.status(200).json({ message: '게시글 조회 완료', foundPost });
+            return res.status(200).json({ message: '게시글 조회 완료', readPost });
         } 
     } catch (error) {
         console.error('readPostByIdx() 오류:', error);
