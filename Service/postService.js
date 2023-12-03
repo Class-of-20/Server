@@ -33,4 +33,21 @@ exports.createPost = (req, res, next) => {
         console.error('createPost() 오류:', error);
         return res.status(400).json({message: '게시글 작성 중 오류 발생'});
     }
-}
+};
+
+
+exports.readPostByIdx = async (req, res, next) => {
+    const idx = req.params.idx;
+    try {
+        const foundPost = await post.findOne({
+            where: {idx: idx},
+        });
+        if (foundPost) {
+            console.log("readPostByIdx() 성공");
+            return res.status(200).json({ message: '게시글 조회 완료', foundPost });
+        } 
+    } catch (error) {
+        console.error('readPostByIdx() 오류:', error);
+        return res.status(500).json({ message: '게시글 조회 중 오류 발생'});
+    }
+};
