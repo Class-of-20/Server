@@ -53,18 +53,18 @@ exports.readPostByIdx = async (req, res, next) => {
 };
 
 
-exports.sortPostByWrite = async (req, res, next) => {
-    const writeDate = req.query.writeDate;
+exports.sortPostByIdx = async (req, res, next) => {
+    const idx = req.query.idx;
     try {
         const sortedPosts = await post.findAll({
-            order: [['writeDate', 'DESC']],
+            order: [['idx', 'DESC']],
         });
         if (sortedPosts) {
-            console.log("sortPostByWrite() 성공");
+            console.log("sortPostByIdx() 성공");
             return res.status(200).json({ message: '게시글 기본 정렬 완료', sortedPosts });
         }
     } catch (error) {
-        console.error('sortPostByWrite() 오류:', error);
+        console.error('sortPostByIdx() 오류:', error);
         return res.status(500).json({ message: '게시글 기본 정렬 중 오류 발생'});
     }
 };
