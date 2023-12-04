@@ -75,6 +75,10 @@ exports.sortPostByMenu = async (req, res, next) => {
     const menu2 = req.query.menu2;
     try {
         const sortedPosts = await post.findAll({
+            where: {
+                menu1: menu1,
+                menu2: menu2,
+            },
             order: [['menu1', 'ASC'], ['menu2', 'ASC']],
         });
         if (sortedPosts) {
