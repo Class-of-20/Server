@@ -21,7 +21,4 @@ router.get('/sort/meetDate',userController.sortPostByMeet);    // 만남일자
 router.get('/sort/people',userController.sortPostByPeople);    // 인원수
 router.get('/sort/address',userController.sortPostByAddress);  // 주소
 
-// 게시글 검색
-router.get('/search', userController.searchPost);
-
 module.exports = router;
