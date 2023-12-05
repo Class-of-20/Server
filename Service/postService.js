@@ -80,7 +80,7 @@ exports.sortPostByMenu = async (req, res, next) => {
                 menu1: menu1,
                 menu2: menu2,
             },
-            order: [['menu1', 'ASC'], ['menu2', 'ASC']],
+            order: [['createdAt', 'DESC']],
         });
         if (sortedPosts) {
             console.log("sortPostByMenu() 성공");
@@ -102,7 +102,7 @@ exports.sortPostByMeet = async (req, res, next) => {
                     [Op.lte]: meetDate,     // 지정 날짜 이전의 게시물
                 },
             },
-            order: [['meetDate', 'DESC']]
+            order: [['createdAt', 'DESC']],
         });
         if (sortedPosts) {
             console.log("sortPostByMeet() 성공");
@@ -120,6 +120,7 @@ exports.sortPostByPeople = async (req, res, next) => {
     try {
         const sortedPosts = await post.findAll({
             where: {people: people},
+            order: [['createdAt', 'DESC']],
         });
         if (sortedPosts) {
             console.log("sortPostByPeople() 성공");
@@ -141,7 +142,7 @@ exports.sortPostByAddress = async (req, res, next) => {
                 address2: address2,
                 address3: address3,
             },
-            order: [['address2', 'ASC'], ['address3', 'ASC']],
+            order: [['createdAt', 'DESC']],
         });
         if (sortedPosts) {
             console.log("sortPostByAddress() 성공");
