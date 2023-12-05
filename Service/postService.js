@@ -54,33 +54,32 @@ exports.readPostByIdx = async (req, res, next) => {
 };
 
 
-exports.sortPostByIdx = async (req, res, next) => {
-    const idx = req.query.idx;
+exports.sortPostByLatest = async (req, res, next) => {
     try {
         const sortedPosts = await post.findAll({
-            order: [['idx', 'DESC']],
+            order: [['createdAt', 'DESC']],
+            limit: 10
         });
         if (sortedPosts) {
-            console.log("sortPostByIdx() 성공");
+            console.log("sortPostByLatest() 성공");
             return res.status(200).json({ message: '게시글 기본 정렬 완료', sortedPosts });
         }
     } catch (error) {
-        console.error('sortPostByIdx() 오류:', error);
+        console.error('sortPostByLatest() 오류:', error);
         return res.status(500).json({ message: '게시글 기본 정렬 중 오류 발생'});
     }
 };
 
 
 exports.sortPostByMenu = async (req, res, next) => {
-    const menu1 = req.query.menu1;
-    const menu2 = req.query.menu2;
+    const menu = req.query.menu2;
     try {
         const sortedPosts = await post.findAll({
             where: {
-                menu1: menu1,
-                menu2: menu2,
+                menu2: menu,
             },
-            order: [['menu1', 'ASC'], ['menu2', 'ASC']],
+            order: [['createdAt', 'DESC']],
+            limit: 10
         });
         if (sortedPosts) {
             console.log("sortPostByMenu() 성공");
@@ -102,7 +101,8 @@ exports.sortPostByMeet = async (req, res, next) => {
                     [Op.lte]: meetDate,     // 지정 날짜 이전의 게시물
                 },
             },
-            order: [['meetDate', 'DESC']]
+            order: [['createdAt', 'DESC']],
+            limit: 10
         });
         if (sortedPosts) {
             console.log("sortPostByMeet() 성공");
@@ -120,6 +120,8 @@ exports.sortPostByPeople = async (req, res, next) => {
     try {
         const sortedPosts = await post.findAll({
             where: {people: people},
+            order: [['createdAt', 'DESC']],
+            limit: 10
         });
         if (sortedPosts) {
             console.log("sortPostByPeople() 성공");
@@ -141,7 +143,8 @@ exports.sortPostByAddress = async (req, res, next) => {
                 address2: address2,
                 address3: address3,
             },
-            order: [['address2', 'ASC'], ['address3', 'ASC']],
+            order: [['createdAt', 'DESC']],
+            limit: 10
         });
         if (sortedPosts) {
             console.log("sortPostByAddress() 성공");
