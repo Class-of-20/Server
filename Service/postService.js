@@ -72,13 +72,11 @@ exports.sortPostByLatest = async (req, res, next) => {
 
 
 exports.sortPostByMenu = async (req, res, next) => {
-    const menu1 = req.query.menu1;
-    const menu2 = req.query.menu2;
+    const menu = req.query.menu2;
     try {
         const sortedPosts = await post.findAll({
             where: {
-                menu1: menu1,
-                menu2: menu2,
+                menu2: menu,
             },
             order: [['createdAt', 'DESC']],
             limit: 10
