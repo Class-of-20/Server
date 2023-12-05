@@ -81,6 +81,7 @@ exports.sortPostByMenu = async (req, res, next) => {
                 menu2: menu2,
             },
             order: [['createdAt', 'DESC']],
+            limit: 10
         });
         if (sortedPosts) {
             console.log("sortPostByMenu() 성공");
@@ -103,6 +104,7 @@ exports.sortPostByMeet = async (req, res, next) => {
                 },
             },
             order: [['createdAt', 'DESC']],
+            limit: 10
         });
         if (sortedPosts) {
             console.log("sortPostByMeet() 성공");
@@ -121,6 +123,7 @@ exports.sortPostByPeople = async (req, res, next) => {
         const sortedPosts = await post.findAll({
             where: {people: people},
             order: [['createdAt', 'DESC']],
+            limit: 10
         });
         if (sortedPosts) {
             console.log("sortPostByPeople() 성공");
@@ -143,6 +146,7 @@ exports.sortPostByAddress = async (req, res, next) => {
                 address3: address3,
             },
             order: [['createdAt', 'DESC']],
+            limit: 10
         });
         if (sortedPosts) {
             console.log("sortPostByAddress() 성공");
