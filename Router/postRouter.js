@@ -10,6 +10,7 @@ router.get('/', (req, res, next) => {
 
 // 게시글 작성
 router.post('/create', userController.createPost);
+router.delete('/:idx', userController.deletePost);
 
 // 게시글 읽기
 router.get('/:idx',userController.readPostByIdx);

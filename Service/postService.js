@@ -33,6 +33,7 @@ exports.createPost = (req, res, next) => {
         console.error('createPost() 오류:', error);
         return res.status(400).json({message: '게시글 작성 중 오류 발생'});
     }
+
 };
 
 
@@ -151,3 +152,20 @@ exports.sortPostByAddress = async (req, res, next) => {
         return res.status(500).json({ message: '게시글 주소순 정렬 중 오류 발생'});
     }
 };
+
+
+
+exports.deletePost =async(req, res) => {
+   
+    try {
+        await post.destroy({
+            where: { idx: req.params.idx },
+        });
+        console.error('deletePost() 성공');
+        return res.status(200).json({message: '게시글 삭제 완료'});
+    } catch (error) {
+        console.log('deletePost() 오류:');
+        return res.status(400).json({ message: '게시물 삭제 중 오류 발생' });
+    } 
+};
+
