@@ -16,7 +16,7 @@ router.delete('/:idx', userController.deletePost);
 router.get('/:idx',userController.readPostByIdx);
 
 // 게시글 정렬
-router.get('/sort/idx',userController.sortPostByIdx);           // 최신순
+router.get('/sort/latest',userController.sortPostByLatest);     // 최신순
 router.get('/sort/menu',userController.sortPostByMenu);        // 메뉴
 router.get('/sort/meetDate',userController.sortPostByMeet);    // 만남일자
 router.get('/sort/people',userController.sortPostByPeople);    // 인원수
