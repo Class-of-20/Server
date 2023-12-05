@@ -3,3 +3,7 @@
 
 # Nodejs Modules
 node_modules
+
+.env
+
+gitCommitMessage.md
