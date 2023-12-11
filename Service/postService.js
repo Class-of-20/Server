@@ -19,7 +19,7 @@ exports.createPost = (req, res, next) => {
             content: content,
             menu1: menu1,
             menu2: menu2,
-            image: image,
+            profileImage: image,
 
             // 그 외
             //writeDate: new Date(now.getDate()),
@@ -155,8 +155,6 @@ exports.sortPostByAddress = async (req, res, next) => {
         return res.status(500).json({ message: '게시글 주소순 정렬 중 오류 발생'});
     }
 };
-
-
 
 exports.deletePost =async(req, res) => {
    
