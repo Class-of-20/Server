@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const sequelize = require('../Database/mariadb.js');
 const user = require('./user');
 
-const post = sequelize.define('chat', {
+const room = sequelize.define('room', {
     idx: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -24,11 +24,11 @@ const post = sequelize.define('chat', {
     },
 });
 
-post.belongsTo(user, {
-    foreignKey: 'user_idx',
+room.belongsTo(user, {
+    foreignKey: 'manager',
     targetKey: 'idx'
 });
 
 sequelize.sync();
 
-module.exports = rooms;
+module.exports = room;
