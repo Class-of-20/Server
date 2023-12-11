@@ -5,7 +5,7 @@ const user = require('./user');
 const post = require('./post');
 const {now} = require("sequelize/lib/utils");
 
-const post = sequelize.define('chat', {
+const chat = sequelize.define('chat', {
     idx: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -38,11 +38,11 @@ const post = sequelize.define('chat', {
     },
 });
 
-post.belongsTo(user, {
+chat.belongsTo(user, {
     foreignKey: 'user_idx',
     targetKey: 'idx'
 });
-post.belongsTo(post, {
+chat.belongsTo(post, {
     foreignKey: 'post_idx',
     targetKey: 'idx'
 });
