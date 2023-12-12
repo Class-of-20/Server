@@ -31,13 +31,14 @@ const io = new Server(server, {
     }
   }
 );
-require("./utils/io")(io);
-app.get("room/:idx", (req, res) => {
+require("./Service/io")(io);
+app.get("/room/:idx", (req, res) => {
+    console.log("/room/:idx 연결")
     const idx = req.params.idx;
     res.send(`Room ${idx}에 대한 정보를 보여주는 페이지`);
   }
 );
 
-app.listen(8080, () => {
-    console.log("Server is running on port 8080.");
+app.listen(port, () => {
+    console.log("Server is running on port", port);
 });
