@@ -2,17 +2,9 @@ const Sequelize = require('sequelize');
 
 const sequelize = require('../Database/mariadb.js');
 const user = require('./user');
-<<<<<<< HEAD
-const post = require('./post');
-const {now} = require("sequelize/lib/utils");
+const room = require('./room');
 
 const chat = sequelize.define('chat', {
-=======
-const room = require('./room');
-const {now} = require("sequelize/lib/utils");
-
-const post = sequelize.define('chat', {
->>>>>>> create-room
     idx: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -27,19 +19,11 @@ const post = sequelize.define('chat', {
             key: 'idx',
         }
     },
-<<<<<<< HEAD
-    post_idx: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-            model: post,
-=======
     room_idx: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
             model: room,
->>>>>>> create-room
             key: 'idx',
         }
     },
@@ -53,21 +37,12 @@ const post = sequelize.define('chat', {
     },
 });
 
-<<<<<<< HEAD
 chat.belongsTo(user, {
     foreignKey: 'user_idx',
     targetKey: 'idx'
 });
-chat.belongsTo(post, {
-    foreignKey: 'post_idx',
-=======
-post.belongsTo(user, {
-    foreignKey: 'user_idx',
-    targetKey: 'idx'
-});
-post.belongsTo(room, {
+chat.belongsTo(room, {
     foreignKey: 'room_idx',
->>>>>>> create-room
     targetKey: 'idx'
 });
 
