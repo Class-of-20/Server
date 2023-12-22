@@ -12,6 +12,7 @@ const port = process.env.PORT;
 app.use(express.json());
 app.use('/user', require('./Router/userRouter'));
 app.use('/post', require('./Router/postRouter'));
+app.use('/room', require('./Router/roomRouter'));
 
 /*==================================*/ 
 const server = app.listen(port, () => {
