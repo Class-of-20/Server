@@ -172,3 +172,28 @@ exports.deletePost =async(req, res) => {
     } 
 };
 
+exports.searchPost = async (req, res, next) => {
+    const search = req.query.search;
+    try {
+        const foundPost = await post.findAll({
+            where: {
+                [Op.or]: [
+                    { address2: { [Op.like]: `%${search}%` } },
+                    { address3: { [Op.like]: `%${search}%` } },
+                    { placeName: { [Op.like]: `%${search}%` } },
+                    { title: { [Op.like]: `%${search}%` } },
+                    { content: { [Op.like]: `%${search}%` } },
+                    { menu1: { [Op.like]: `%${search}%` } },
+                    { menu2: { [Op.like]: `%${search}%` } },
+                ]
+            }
+        });
+        if (foundPost) {
+            console.log("searchPost() 성공");
+            return res.status(200).json({ message: '게시글 검색 완료', foundPost });
+        }
+    } catch (error) {
+        console.error('searchPost() 오류:', error);
+        return res.status(500).json({ message: '게시글 검색 중 오류 발생'});
+    }
+};

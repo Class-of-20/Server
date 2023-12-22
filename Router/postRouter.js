@@ -13,7 +13,7 @@ router.post('/create', userController.createPost);
 router.delete('/:idx', userController.deletePost);
 
 // 게시글 읽기
-router.get('/:idx',userController.readPostByIdx);
+router.get('/searchby/:idx',userController.readPostByIdx);
 
 // 게시글 정렬
 router.get('/sort/latest',userController.sortPostByLatest);     // 최신순
@@ -21,5 +21,8 @@ router.get('/sort/menu',userController.sortPostByMenu);        // 메뉴
 router.get('/sort/meetDate',userController.sortPostByMeet);    // 만남일자
 router.get('/sort/people',userController.sortPostByPeople);    // 인원수
 router.get('/sort/address',userController.sortPostByAddress);  // 주소
+
+// 게시글 검색
+router.get('/search', userController.searchPost);
 
 module.exports = router;
