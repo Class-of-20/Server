@@ -1,17 +1,33 @@
 const express = require('express');
 const mysql = require("mysql2");
+
 const session = require('express-session');
 const http = require('http');
 const { Server } = require("socket.io");
+
 require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT;
 
-//미틀웨어 및 라우터 설정
 app.use(express.json());
+
+app.use(session({
+    key: 'sessionIdx',
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 24000 * 60 * 60     // 쿠키 유효기간 24시간
+    }
+}));
+
 app.use('/user', require('./Router/userRouter'));
+
+app.use('/login', require('./Router/loginRouter'));
+
 app.use('/post', require('./Router/postRouter'));
+
 app.use('/room', require('./Router/roomRouter'));
 
 /*==================================*/ 
@@ -19,6 +35,7 @@ const server = app.listen(port, () => {
   console.log("Server is running on port",port);
 });
 /*=======================================*/
+
 //서버에  socket io 추가
 const io = require('socket.io')(server)
 const connectedUser = new Set();
@@ -50,3 +67,4 @@ io.on('connection', (socket)=>{
       io.to("chatRoom UUID").emit("hello");
   });
 })
+

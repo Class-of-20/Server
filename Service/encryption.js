@@ -23,7 +23,7 @@ const createHashedPassword = async (password) => {
 
 // 비밀번호 검증 함수 (사용자가 입력한 비밀번호, DB에 저장된 salt, DB에 저장된 hashedPassword)
 const verifyPassword = async (enteredPassword, userSalt, hashedPassword) => {
-    const key = await pbkdf2Promise(enteredPassword, userSalt, 19215, 64, "sha512");
+    const key = await pbkdf2Promise(enteredPassword, userSalt, 13191, 64, "sha512");
     const functionPassword = key.toString("base64");
 
     if (functionPassword === hashedPassword) return true;
@@ -31,3 +31,4 @@ const verifyPassword = async (enteredPassword, userSalt, hashedPassword) => {
 };
 
 module.exports = { createHashedPassword };
+module.exports = { verifyPassword };
