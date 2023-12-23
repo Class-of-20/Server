@@ -28,7 +28,7 @@ exports.login = async(req, res, next) => {
         };
 
         // 세션 설정
-        req.session.idx = person.idx;
+        req.session = person;
 
         console.log("login() 성공");
         return res.status(200).json({message: '로그인이 성공적으로 완료되었습니다.', session: req.session});
