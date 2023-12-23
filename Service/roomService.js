@@ -6,7 +6,6 @@ exports.readRoom = async (req, res, next) => {
     const user_idx = req.params.user_idx;
     try {
         const readRoom = await room.findAll({
-          attributes: ['*'],
           include: [
             {
               model: post,
