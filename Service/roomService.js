@@ -1,25 +1,22 @@
 const room = require('../Model/room');
-const user = require('../Model/user');
 const post = require('../Model/post');
+const { Sequelize } = require('sequelize');
 
 exports.readRoom = async (req, res, next) => {
-    const useridx = req.params.user_idx;
+    const user_idx = req.params.user_idx;
     try {
         const readRoom = await room.findAll({
-            attributes: ['idx'],
-            include: [
-                {
-                  model: post,
-                  attributes: [],
-                  where: {
-                    writer: useridx,
-                  },
-                },
-                {
-                  model: user,
-                  attributes: [],
-                },
-              ],
+          attributes: ['*'],
+          include: [
+            {
+              model: post,
+              attributes: [],
+              where: {
+                idx: Sequelize.col('room.post_idx'),
+                writer: user_idx
+              },
+            },
+          ],
         });
         if (readRoom) {
             console.log("readRoom() 성공");
