@@ -30,11 +30,12 @@ app.use('/post', require('./Router/postRouter'));
 
 app.use('/room', require('./Router/roomRouter'));
 
+app.use('/chat',require('./Router/chatRouter'));
+
 /*==================================*/ 
 const server = app.listen(port, () => {
   console.log("Server is running on port",port);
 });
-/*=======================================*/
 
 //서버에  socket io 추가
 const io = require('socket.io')(server)
@@ -55,7 +56,7 @@ io.on('connection', (socket)=>{
   //메세지 보낼 시,
   socket.on('message', (data)=>{
       console.log(data);   
-      //해당 소켓을 제외한 나머지 소켓에세 데이터를 전송
+      //해당 소켓을 제외한 나머지 소켓에세 데이터를 전P송
       socket.emit('message-recive', data);
   })
   // "joinChatRoom" 이벤트가 발생하면 콜백 함수 실행
