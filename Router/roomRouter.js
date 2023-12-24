@@ -11,4 +11,7 @@ router.get('/', (req, res, next) => {
 // 채팅방 목록
 router.get('/:user_idx',userController.readRoom);
 
+//채팅방 유저 조회
+router.get('/user/:post_idx', userController.readRoomUser);
+
 module.exports = router;
