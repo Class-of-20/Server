@@ -32,8 +32,9 @@ const room = sequelize.define('room', {
         defaultValue: 0,
         unsigned: true, 
     },
-});
-
+},{
+    timestamps: false, // createdAt 및 updatedAt 필드를 자동 생성하지 않음
+  });
 room.belongsTo(user, {
     foreignKey: 'user_idx',
     targetKey: 'idx'
