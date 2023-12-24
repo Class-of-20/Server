@@ -46,9 +46,11 @@ exports.readPostByIdx = async (req, res, next) => {
             where: {idx: idx},
         });
 
-         const writerProfile = await user.findOne({
+         const writers = await user.findOne({
             where: {idx: readPost.writer},
          });
+
+         const writerProfile = {idx: writers.idx, name:writers.name, profileImage:writers.profileImage};
 
         if (readPost) {
             console.log("readPostByIdx() 성공");
