@@ -6,12 +6,12 @@ exports.readRoom = async (req, res, next) => {
     const user_idx = req.params.user_idx;
     try {
         const readRoom = await room.findAll({
+          attributes: ['idx', 'user_idx', 'post_idx', 'check'],
           include: [
             {
               model: post,
               attributes: [],
               where: {
-                idx: Sequelize.col('room.post_idx'),
                 writer: user_idx
               },
             },
