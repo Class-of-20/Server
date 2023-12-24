@@ -1,4 +1,5 @@
 const post = require('../Model/post');
+const user = require('../Model/user');
 const {Op, TIME, DATE} = require("sequelize");
 const {now} = require("sequelize/lib/utils");
 
@@ -39,13 +40,19 @@ exports.createPost = (req, res, next) => {
 
 exports.readPostByIdx = async (req, res, next) => {
     const idx = req.params.idx;
+
     try {
         const readPost = await post.findOne({
             where: {idx: idx},
         });
+
+         const writerProfile = await user.findOne({
+            where: {idx: readPost.writer},
+         });
+
         if (readPost) {
             console.log("readPostByIdx() 성공");
-            return res.status(200).json({ message: '게시글 조회 완료', readPost });
+            return res.status(200).json({ message: '게시글 조회 완료', readPost, writerProfile });
         } 
     } catch (error) {
         console.error('readPostByIdx() 오류:', error);
