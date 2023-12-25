@@ -160,3 +160,21 @@ exports.checkPermission = async (req, res, next) => {
     }
   }
   
+  exports.countCheck= async (req, res) =>
+  {
+    const post_idx = req.query.post_idx; //현재 room 위치
+    try{
+      const countCheck =await room.findAll({ where: { post_idx: post_idx, check: 1} });
+  
+      if (countCheck.length>=0) {
+        console.log("countCheck():",countCheck.length);
+        return res.status(200).json({ message: "countCheck() 성공", count: countCheck.length })
+      } else {
+        console.log("check update fail");
+        return res.status(500).json({ message: '이미 적용이 됨' });
+      }
+    }catch{
+      console.error('countCheck() 오류:', error);
+      return res.status(200).json({ message: "countCheck() 중 오류 발생"});
+    }
+  }
