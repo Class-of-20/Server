@@ -1,25 +1,22 @@
 const room = require('../Model/room');
-const user = require('../Model/user');
 const post = require('../Model/post');
+const user = require('../Model/user');
+const { Sequelize } = require('sequelize');
 
 exports.readRoom = async (req, res, next) => {
-    const useridx = req.params.user_idx;
+    const user_idx = req.params.user_idx;
     try {
         const readRoom = await room.findAll({
-            attributes: ['idx'],
-            include: [
-                {
-                  model: post,
-                  attributes: [],
-                  where: {
-                    writer: useridx,
-                  },
-                },
-                {
-                  model: user,
-                  attributes: [],
-                },
-              ],
+          attributes: ['idx', 'user_idx', 'post_idx', 'check'],
+          include: [
+            {
+              model: post,
+              attributes: [],
+              where: {
+                writer: user_idx
+              },
+            },
+          ],
         });
         if (readRoom) {
             console.log("readRoom() 성공");
@@ -30,6 +27,32 @@ exports.readRoom = async (req, res, next) => {
         return res.status(500).json({ message: '채팅방 조회 중 오류 발생'});
     }
 };
+
+exports.readRoomUser = async (req, res, next) => {
+  const post_idx = req.params.post_idx;
+  try {
+    const readRoomUser = await room.findAll({
+      attributes: ['post_idx'],
+      include: [
+        {
+          model: user,
+          attributes: ['name'],
+        },
+      ],
+      where: {
+        post_idx: post_idx,
+      },
+    });
+    if (readRoomUser) {
+        console.log("readRoomUser() 성공");
+        return res.status(200).json({ message: '채팅방 유저 조회 완료', readRoomUser });
+    } 
+  } catch (error) {
+      console.error('readRoomUser() 오류:', error);
+      return res.status(500).json({ message: '채팅방 유저 조회 중 오류 발생'});
+  }
+};
+
 
 exports.joinRoom = async (req, res) => {
   const post_idx = req.query.post_idx;

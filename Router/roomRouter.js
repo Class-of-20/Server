@@ -3,6 +3,11 @@ const router = express.Router();
 
 const userController = require('../Service/roomService');
 
+// '/room' is the default endpoint
+router.get('/', (req, res, next) => {
+    console.log("default endpoint");
+});
+
 // 채팅방 정렬
 router.get('/',userController.readRoom);
 
@@ -15,5 +20,7 @@ router.get('/check',userController.checkPermission);
 //권한 부여
 router.get('/grant',userController.grantCheck);
 
+//채팅방 유저 조회
+router.get('/user/', userController.readRoomUser);
 
 module.exports = router;
