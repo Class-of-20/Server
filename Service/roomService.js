@@ -3,25 +3,6 @@ const post = require('../Model/post');
 const user = require('../Model/user');
 const { Sequelize } = require('sequelize');
 
-exports.createRoom = async (req, res, next) => {
-  try{
-      const { user_idx, post_idx, } = req.body;
-
-      room.create({
-        user_idx: user_idx,
-        post_idx: post_idx,
-      });
-
-      console.log("createRoom() 성공");
-      return res.status(200).json({message: '채팅방 생성 완료'});
-
-  } catch (error) {
-      console.error('createRoom() 오류:', error);
-      return res.status(400).json({message: '채팅방 생성 중 오류 발생'});
-  }
-
-};
-
 exports.readRoom = async (req, res, next) => {
     const user_idx = req.params.user_idx;
     try {
