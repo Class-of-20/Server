@@ -32,7 +32,9 @@ const room = sequelize.define('room', {
         defaultValue: 0,
         unsigned: true, 
     },
-});
+},{
+    timestamps: false,
+  });
 
 room.belongsTo(user, {
     foreignKey: 'user_idx',

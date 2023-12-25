@@ -1,4 +1,5 @@
 const post = require('../Model/post');
+const user = require('../Model/user');
 const {Op, TIME, DATE} = require("sequelize");
 const {now} = require("sequelize/lib/utils");
 
@@ -39,13 +40,21 @@ exports.createPost = (req, res, next) => {
 
 exports.readPostByIdx = async (req, res, next) => {
     const idx = req.params.idx;
+
     try {
         const readPost = await post.findOne({
             where: {idx: idx},
         });
+
+         const writers = await user.findOne({
+            where: {idx: readPost.writer},
+         });
+
+         const writerProfile = {idx: writers.idx, name:writers.name, profileImage:writers.profileImage};
+
         if (readPost) {
             console.log("readPostByIdx() 성공");
-            return res.status(200).json({ message: '게시글 조회 완료', readPost });
+            return res.status(200).json({ message: '게시글 조회 완료', readPost, writerProfile });
         } 
     } catch (error) {
         console.error('readPostByIdx() 오류:', error);
@@ -153,6 +162,42 @@ exports.sortPostByAddress = async (req, res, next) => {
     } catch (error) {
         console.error('sortPostByAddress() 오류:', error);
         return res.status(500).json({ message: '게시글 주소순 정렬 중 오류 발생'});
+    }
+};
+exports.searchPost = async (req, res, next) => {
+    const searchKeyword = req.query.keyword; // 검색 키워드
+
+    try {
+        // 검색 조건 설정 (title, content, placeName 중 하나와 일치하는 경우)
+        const whereCondition = {
+            [Sequelize.Op.or]: [
+                { title: { [Sequelize.Op.like]: `%${searchKeyword}%` } },
+                { content: { [Sequelize.Op.like]: `%${searchKeyword}%` } },
+                { placeName: { [Sequelize.Op.like]: `%${searchKeyword}%` } }, 
+                { address2: { [Sequelize.Op.like]: `%${searchKeyword}%` } },
+                { address3: { [Sequelize.Op.like]: `%${searchKeyword}%` } },
+                { menu1: { [Sequelize.Op.like]: `%${searchKeyword}%` } },
+                { menu2: { [Sequelize.Op.like]: `%${searchKeyword}%` } },
+            ],
+        };
+
+        const searchResult = await post.findAll({
+            attributes: ["idx","writer", "address2", "address3", "placeName", "meetDate", "meetTime",
+                "people", "title", "content", "menu1", "menu2", "profileImage", "createdAt"],
+            where: whereCondition,
+            order: [['createdAt', 'DESC']], // 작성일 기준 내림차순 정렬
+        });
+
+        if (searchResult && searchResult.length > 0) {
+            console.log("searchPost() 성공");
+            return res.status(200).json({ message: '게시글 검색 완료', searchResult });
+        } else {
+            console.log("searchPost() 결과 없음");
+            return res.status(404).json({ message: '검색 결과가 없습니다.' });
+        }
+    } catch (error) {
+        console.error('searchPost() 오류:', error);
+        return res.status(500).json({ message: '게시글 검색 중 오류 발생', error: error.message });
     }
 };
 

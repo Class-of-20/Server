@@ -8,10 +8,19 @@ router.get('/', (req, res, next) => {
     console.log("default endpoint");
 });
 
-// 채팅방 목록
-router.get('/:user_idx',userController.readRoom);
+// 채팅방 정렬
+router.get('/',userController.readRoom);
+
+//채팅방 참여
+router.get('/join', userController.joinRoom);
+
+//작성자 여부 확인
+router.get('/check',userController.checkPermission);
+
+//권한 부여
+router.get('/grant',userController.grantCheck);
 
 //채팅방 유저 조회
-router.get('/user/:post_idx', userController.readRoomUser);
+router.get('/user/', userController.readRoomUser);
 
 module.exports = router;
