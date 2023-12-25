@@ -136,22 +136,32 @@ exports.checkPermission = async (req, res, next) => {
       countCheck =await room.findAll({ where: { post_idx: post_idx, check: 1} });
       console.log('check된 인원 수:', countCheck.length);
   
-      const [grantCount]  = await room.update({ 
-        user_idx: user_idx,
-        check: check },{ 
-        where: {
-          post_idx: post_idx,
-        },
-      });
-  
-      if (grantCount > 0&&countCheck.length <postInfo.dataValues.people) {
-        console.log("updateCheck() 성공");
+      if(countCheck.length <postInfo.dataValues.people&&check==1) {
+        console.log("check=1으로 업데이트");
+        await room.update({ 
+          check: 1 },{ 
+          where: {
+            user_idx: user_idx,
+            post_idx: post_idx,
+          },
+        });
+        return res.status(200).json({ message: 'check 업데이트 성공' });
+      }
+      else if(countCheck.length <=postInfo.dataValues.people&&check==0){
+        console.log("check=0으로 업데이트");
+          await room.update({ 
+          check: 0 },{ 
+          where: {
+            user_idx: user_idx,
+            post_idx: post_idx,
+          },
+        });
         return res.status(200).json({ message: 'check 업데이트 성공' });
       } else if(countCheck.length >=postInfo.dataValues.people){
-        console.log("정원 참");
-        return res.status(500).json({ message: '정원 참' });
+          console.log("정원 참");
+          return res.status(500).json({ message:'정원 참'});
       } else {
-        console.log("check update fail");
+        console.log("이미 적용된 업데이트");
         return res.status(500).json({ message: '이미 적용이 됨' });
       }
     } catch (error) {
