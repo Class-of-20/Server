@@ -31,46 +31,6 @@ exports.readRoom = async (req, res, next) => {
     }
 };
 
-exports.searchPost = async (req, res) => {
-  const searchKeyword = req.query.keyword; // 검색 키워드
-  try {
-      const searchResult = await post.findAll({
-          attributes: ["idx", "writer", "address2", "address3", "placeName", "meetDate", "meetTime",
-              "people", "title", "content", "menu1", "menu2", "profileImage", "createdAt"],
-          where: {
-              [Sequelize.Op.or]: [
-                  { writer: { [Sequelize.Op.like]: `%${searchKeyword}%` } },
-                  { address2: { [Sequelize.Op.like]: `%${searchKeyword}%` } },
-                  { address3: { [Sequelize.Op.like]: `%${searchKeyword}%` } },
-                  { placeName: { [Sequelize.Op.like]: `%${searchKeyword}%` } },
-                  { meetDate: { [Sequelize.Op.like]: `%${searchKeyword}%` } },
-                  { meetTime: { [Sequelize.Op.like]: `%${searchKeyword}%` } },
-                  { people: { [Sequelize.Op.like]: `%${searchKeyword}%` } },
-                  { title: { [Sequelize.Op.like]: `%${searchKeyword}%` } },
-                  { content: { [Sequelize.Op.like]: `%${searchKeyword}%` } },
-                  { menu1: { [Sequelize.Op.like]: `%${searchKeyword}%` } },
-                  { menu2: { [Sequelize.Op.like]: `%${searchKeyword}%` } },
-                  { profileImage: { [Sequelize.Op.like]: `%${searchKeyword}%` } },
-              ],
-          },
-          order: [['createdAt', 'DESC']], // 작성일 기준 내림차순 정렬
-          limit: 10,
-      });
-
-      // 검색 결과가 있을 경우
-      if (searchResult && searchResult.length > 0) {
-          console.log("searchPost() 성공");
-          return res.status(200).json({ message: '게시글 검색 완료', searchResult });
-      } else {
-          console.log("searchPost() 결과 없음");
-          return res.status(404).json({ message: '검색 결과가 없습니다.' });
-      }
-  } catch (error) {
-      console.error('searchPost() 오류:', error);
-      return res.status(500).json({ message: '게시글 검색 중 오류 발생' });
-  }
-};
-
 exports.joinRoom = async (req, res) => {
   const post_idx = req.query.post_idx;
   const user_idx = req.query.user_idx;
