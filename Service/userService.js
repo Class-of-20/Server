@@ -80,6 +80,47 @@ exports.postCreateUser = (req, res, next) => {
     createUser(req, res);
 };
 
+// 회원 정보 수정
+exports.postUpdateUser = async (req, res, next) => {
+    try {
+        const idx = req.body.idx;
+
+        const result = await user.findOne({
+            where: { idx: idx },
+        });
+
+        let password = req.body.password ? req.body.password : null;
+        let salt = result.salt;
+        let hashedPassword = result.password;
+
+        if (password != null) {
+            //let {hashedPassword, salt} = await createHashedPassword(password);
+        };
+
+        // 회원가입
+        const result_update = await user.update({
+            id: result.id,
+            password: hashedPassword,
+            name: req.body.name ? req.body.name : result.name,
+            address1: req.body.address1 ? req.body.address1 : result.address1,
+            address2: req.body.address2 ? req.body.address2 : result.address2,
+            address3: req.body.address3 ? req.body.address3 : result.address3,
+            profileImage: req.body.profileImage ? req.body.profileImage : result.profileImage,
+            salt: salt,
+        }, {
+            where: { idx: idx }
+        });
+
+        console.log('회원정보 수정 성공!');
+        return res.status(200).json({ message: '회원정보 수정 성공' });
+
+    } catch (error) {
+        console.error('회원정보 수정 중 오류 발생:', error);
+        return res.status(400).json({ message: '회원정보 수정 중 오류 발생' });
+    }
+}
+
+
 // 회원탈퇴
 exports.postDestroyUser = (req, res, next) => {
     const idx = req.body.idx;
