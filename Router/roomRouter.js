@@ -23,4 +23,7 @@ router.get('/grant',userController.grantCheck);
 //채팅방 유저 조회
 router.get('/user/', userController.readRoomUser);
 
+//채팅방 삭제
+router.delete('/delete/', userController.deleteRoom);
+
 module.exports = router;

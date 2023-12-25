@@ -141,3 +141,17 @@ exports.grantCheck = async (req, res) => {
     return res.status(500).json({ message: 'check 업데이트 중 오류 발생' });
   }
 }
+
+
+exports.deleteRoom =async(req, res) => {
+  try {
+      await room.destroy({
+          where: { idx: req.params.idx },
+      });
+      console.error('deleteRoom() 성공');
+      return res.status(200).json({message: '채팅방 삭제 완료'});
+  } catch (error) {
+      console.log('deleteRoom() 오류:');
+      return res.status(400).json({ message: '채팅방 삭제 중 오류 발생' });
+  } 
+};
