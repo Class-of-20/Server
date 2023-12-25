@@ -108,37 +108,56 @@ exports.checkPermission = async (req, res, next) => {
   }
 };
 
-//사용자가 writer일 때만 사용할 수 있다는 가정
-exports.grantCheck = async (req, res) => {
+  //사용자가 writer일 때만 사용할 수 있다는 가정
+  exports.grantCheck = async (req, res) => {
     const post_idx = req.query.post_idx; //현재 room 위치
     const user_idx = req.query.user_idx; //바꿀 user의 idx
     const check = req.query.check;//바꿀 room의 check
-  try {
+    try {
       console.log('post_idx: ',post_idx);
+      
+      //정원 수
+      const postInfo = await post.findOne({where:{idx:post_idx}});
+      console.log('정원 수: ', postInfo.dataValues.people);
+      
+      if (!postInfo) {
+        console.log("해당하는 게시물이 없음");
+        return res.status(404).json({ message: '해당하는 게시물이 없습니다.' });
+      }    
+      
+      //들어갈 room 정보 받기
       const roomInfo = await room.findOne({ where: { post_idx: post_idx } });
       if (!roomInfo) {
-          console.log("해당하는 방이 없음");
-          return res.status(404).json({ message: '해당하는 방이 없습니다.' });
+        console.log("해당하는 방이 없음");
+        return res.status(404).json({ message: '해당하는 방이 없습니다.' });
       }
+  
+      //check된 인원 수 불러오기
+      countCheck =await room.findAll({ where: { post_idx: post_idx, check: 1} });
+      console.log('check된 인원 수:', countCheck.length);
+  
       const [grantCount]  = await room.update({ 
-          user_idx: user_idx,
-          check: check },{ 
-          where: {
-              post_idx: post_idx,
-          },
-    });
-    console.log('grantCount: ',grantCount);
-    if (grantCount > 0) {
-      console.log("updateCheck() 성공");
-      return res.status(200).json({ message: 'check 업데이트 성공' });
+        user_idx: user_idx,
+        check: check },{ 
+        where: {
+          post_idx: post_idx,
+        },
+      });
+  
+      if (grantCount > 0&&countCheck.length <postInfo.dataValues.people) {
+        console.log("updateCheck() 성공");
+        return res.status(200).json({ message: 'check 업데이트 성공' });
+      } else if(countCheck.length >=postInfo.dataValues.people){
+        console.log("정원 참");
+        return res.status(500).json({ message: '정원 참' });
+      } else {
+        console.log("check update fail");
+        return res.status(500).json({ message: '이미 적용이 됨' });
+      }
+    } catch (error) {
+      console.error('updateCheck() 오류:', error);
+      return res.status(500).json({ message: 'check 업데이트 중 오류 발생' });
     }
-    else {
-      console.log("check update fail");
-      return res.status(500).json({ message: 'check 업데이트 실패' });
-    }
-  } catch (error) {
-    console.error('updateCheck() 오류:', error);
-    return res.status(500).json({ message: 'check 업데이트 중 오류 발생' });
   }
 }
 
@@ -155,3 +174,22 @@ exports.deleteRoom =async(req, res) => {
       return res.status(400).json({ message: '채팅방 삭제 중 오류 발생' });
   } 
 };
+  
+  exports.countCheck= async (req, res) =>
+  {
+    const post_idx = req.query.post_idx; //현재 room 위치
+    try{
+      const countCheck =await room.findAll({ where: { post_idx: post_idx, check: 1} });
+  
+      if (countCheck.length>=0) {
+        console.log("countCheck():",countCheck.length);
+        return res.status(200).json({ message: "countCheck() 성공", count: countCheck.length })
+      } else {
+        console.log("check update fail");
+        return res.status(500).json({ message: '이미 적용이 됨' });
+      }
+    }catch{
+      console.error('countCheck() 오류:', error);
+      return res.status(200).json({ message: "countCheck() 중 오류 발생"});
+    }
+  }

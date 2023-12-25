@@ -20,6 +20,9 @@ router.get('/check',userController.checkPermission);
 //권한 부여
 router.get('/grant',userController.grantCheck);
 
+//CHECK된 사용자 수 조회
+router.get('/count',userController.countCheck);
+
 //채팅방 유저 조회
 router.get('/user/', userController.readRoomUser);
 
