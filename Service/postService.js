@@ -181,12 +181,25 @@ exports.searchPost = async (req, res, next) => {
             ],
         };
 
-        const searchResult = await post.findAll({
-            attributes: ["idx","writer", "address2", "address3", "placeName", "meetDate", "meetTime",
+        const searchResult = await room.findAll({
+            attributes: [
+                [Sequelize.fn('COUNT', Sequelize.col('check')), 'countCheck']
+            ],
+            where:  { check: 1 },
+            include: [{
+                model: post,
+                attributes: ["idx","writer", "address2", "address3", "placeName", "meetDate", "meetTime",
                 "people", "title", "content", "menu1", "menu2", "profileImage", "createdAt"],
-            where: whereCondition,
-            order: [['createdAt', 'DESC']], // 작성일 기준 내림차순 정렬
+                where: whereCondition,
+            },{
+                model: user,
+                attributes: ["name", "profileImage", "idx"]
+              }],
+              
+            group: ['post_idx'],
+            order: [[post,'createdAt', 'DESC']], // 작성일 기준 내림차순 정렬
         });
+
 
         if (searchResult && searchResult.length > 0) {
             console.log("searchPost() 성공");
