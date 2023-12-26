@@ -65,13 +65,29 @@ exports.readPostByIdx = async (req, res, next) => {
 
 exports.sortPostByLatest = async (req, res, next) => {
     try {
-        const sortedPosts = await post.findAll({
-            order: [['createdAt', 'DESC']],
-            limit: 10
-        });
+        const sortedPosts = await room.findAll({
+            attributes: [
+              [Sequelize.fn('COUNT', Sequelize.col('check')), 'countCheck']
+            ],
+            where: { check: 1 },
+            include: [
+              {
+                model: post,
+              },
+              {
+                model: user,
+                attributes: ["name", "profileImage", "idx"]
+              }
+            ],
+            limit: 10,
+            group: ['post_idx'],
+            order: [
+                [post, "createdAt", "DESC"]
+            ],
+          });
         if (sortedPosts) {
             console.log("sortPostByLatest() 성공");
-            return res.status(200).json({ message: '게시글 기본 정렬 완료', sortedPosts });
+            return res.status(200).json({ message: '게시글 기본 정렬 완료', sortedPosts});
         }
     } catch (error) {
         console.error('sortPostByLatest() 오류:', error);
